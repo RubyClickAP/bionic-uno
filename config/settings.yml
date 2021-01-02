@@ -1,0 +1,34 @@
+defaults: &defaults
+  :log_level: warn
+  :redis:
+    :host: localhost
+    :port: 6379
+
+  :resque_redis: localhost:6379
+
+  # Notifications
+  :max_notification_attempts: 3
+
+  :sitekey: clickap
+
+:development:
+  <<: *defaults
+  :log_level: debug 
+  # Local File Store Settings
+  :temp_video_filepath: public/data/tmp_videos
+  :hls_video_filepath: public/hls
+
+:test:
+  <<: *defaults
+  :redis:
+    :host: localhost
+    :port: 6379
+    :db: 15
+
+
+:production:
+  <<: *defaults
+  :log_level: info
+  # Local File Store Settings
+  :temp_video_filepath: public/data/tmp_videos
+  :hls_video_filepath: public/hls

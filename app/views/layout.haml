@@ -1,0 +1,29 @@
+!!! Strict
+%html
+  %head
+    %title Click-AP Streaming Server
+    %meta{:"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+    %link{:rel => "stylesheet", :href => "/css/site.css", :type => "text/css"}
+    %link{:rel => "stylesheet", :href => "/css/jquery.fancybox.min.css", :type => "text/css"}
+    %script{:type => "text/javascript", :src => "/js/jquery-3.3.1.min.js"}
+    %script{:type => "text/javascript", :src => "/js/jquery.fancybox.min.js"}
+    %script{:type => "text/javascript", :src => "/js/application.js"}
+    %script{:type => "text/javascript", :src => "/js/hls.min.js"}
+  %body
+    #top_header
+      #logo_container
+        %a{:href => "/"}
+          %img{:src => "/images/pandaLogo_85.png", :width=>360, :height=>68}
+      #menu_container
+        %ul{:class => "menu"}
+          - if @successlogin
+            %li
+              %a{:href => '/admin/logout', :class => 'logout'}
+          - else
+            %li
+              %a{:href => '/admin/login', :class => 'dashboard'}
+          /%li
+          /  %a{:href => "/queue/", :class => "resque", :target => "_blank"}
+
+    #content
+      != yield

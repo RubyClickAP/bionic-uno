@@ -1,0 +1,29 @@
+#info_area
+  / Area for displaying information from the server, if any
+  
+%h2{:class => "section_heading"} Channels
+
+%table{:id => "client_table", :cellspacing => "0", :class => "index_view"}
+  %tr
+    %th{:class => 'first'}
+      Id
+    %th
+      Client Name
+    %th
+      Notification URL
+    %th{:class => "nobg"}
+    
+  - @clients.each do |client|
+    %tr{:id => "client_#{client.id}"}
+      %td{:class => 'first'}
+        = client.id
+      %td
+        = client.name
+      %td
+        = client.notification_url
+
+%a{:href => "#", :onclick => "javascript:window.location.href='/admin/login';", :class => "right"} Login 
+
+
+#client_details{:style => "display:none;"}
+/ Area for displaying client details
