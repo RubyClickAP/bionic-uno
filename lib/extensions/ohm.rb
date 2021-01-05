@@ -1,6 +1,7 @@
 module Ohm
   #module Attributes
   class Model
+    include Scrivener::Validations
     class Set
       # Returns an array of Ohm::Models converted to JSON
       def to_json
@@ -38,9 +39,12 @@ module Ohm
     # and their values
     def attributes_with_values
       returning attrs = {} do
+        #logger.debug("self.id: #{self.id}")
         attrs[:id] = self.id rescue nil
         self.attributes.each do |attribute|
-          attrs[attribute] = self.send(attribute)
+          logger.debug("attribute: #{attribute.inspect} and class: #{attribute.class}")
+          #attrs[attribute] = self.send(attribute)
+          attrs[attribute[0]] = attribute[1]
         end
       end
     end
