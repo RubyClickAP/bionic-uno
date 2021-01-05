@@ -175,7 +175,7 @@ function appendToOrReplaceInClientTable(data, action) {
 	html += "<td>" + data.access_key + "</td>";
 	html += "<td>" + data.notification_url + "</td>";
 	html += "<td class='last'>";
-	html += "<a href='#' onclick='showClientVideos(" + data.id + ")' class='video'>Videos</a>";
+	html += "<a href='#' onclick='showClientVideos(" + data.id + ")' class='video'>Documents</a>";
 	html += " | ";
 	html += "<a href='#' onclick='showClientProfiles(" + data.id + ")' class='show'>Profiles</a>";
 	html += " | ";

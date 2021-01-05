@@ -446,7 +446,7 @@ table.details_view {
 
 a[class = 'video'] {
 	padding-left: 16px;
-  background: transparent url(images/video_icon.png) no-repeat center left;
+  background: transparent url(images/document_icon.png) no-repeat center left;
 }
 
 a[class = 'show'] {

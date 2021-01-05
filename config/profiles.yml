@@ -1,0 +1,13 @@
+profile:
+  title: WMV-H264-MPEGTS
+  container: ts
+  encoded_filename_suffix: -%d.ts
+  segment_path: /tmp/hls
+  video_command: "ffmpeg -y -loglevel info -i $input_file$ -f segment -segment_time 10 -segment_format mpegts -segment_list $output_file$ -c:a aac -vcodec libx264 -strict -2 -q:a 100 -map 0 $segment_file$"
+  video_bitrate: 400
+  audio_command:
+  audio_bitrate: 48
+  width: 480
+  height: 360
+  fps: 23
+  player: flash 

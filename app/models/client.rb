@@ -3,6 +3,7 @@ class Client < Ohm::Model
   attribute :access_key
 #  attribute :s3_bucket_name
   attribute :notification_url
+  unique :access_key
   
   # Associations
   set :profiles, Profile
@@ -17,16 +18,16 @@ class Client < Ohm::Model
   def validate
     assert_present    :name
     assert_present    :access_key
-    assert_unique     :access_key
+    #assert_unique     :access_key
     #assert_present    :s3_bucket_name
     #assert_unique     :s3_bucket_name
     #assert_format     :s3_bucket_name, /^\S*$/
   end
 
-  
   def self.create_with_default_profiles(params)
     client = create params.merge!(:access_key => generate_access_key)
     client.perform_post_create_setup if client.valid?
+    #logger.debug("Preparing files failed: #{client.inspect}")
     return client
   end
   
@@ -42,12 +43,15 @@ class Client < Ohm::Model
   end
    
   def to_json
+    logger.debug(self.attributes_with_values.to_json)
     self.attributes_with_values.merge(:errors => error_messages).to_json
+    #self.attributes_with_values.to_json
   end
   
   # Presents the error messages in a readable format
   def error_messages
-    self.errors.present do |e|
+    logger.debug("errors: #{errors.inspect}, class: #{errors.class}")
+    self.errors do |e|
       e.on [:name, :not_present], "Name must be present"
       e.on [:access_key, :not_present], "Access key must be present"
       e.on [:access_key, :not_unique], "Access key must be unique"

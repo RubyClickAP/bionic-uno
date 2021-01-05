@@ -1,0 +1,89 @@
+%h3{:class => "section_heading"}="Documents for #{@client.name}"
+
+#client_videos{:class => "section"}
+  %ul{:class => "column"}
+    -@docs.each do |video|
+      %li{:class => "column_li", :id => "video_#{video.id}"}
+        %div{:class => "imgblock"}
+          %img{:src => "#{video.thumbnail_filepath}", :width => 200}
+          Thumbnail Preview
+          |
+          %a{:href => "#", :onclick => "deleteVideo(#{@client.id},#{video.id})", :class => "remove"} Delete
+        %div{:class => "detail"}
+          %table{:class => "details_view"}
+            %tr
+              %td{:class => "first"} Filename
+              %td
+                %strong=video.basename
+            %tr
+              %td{:class => "first"} Duration
+              %td=video.duration
+            %tr
+              %td{:class => "first"} Width
+              %td=video.width
+            %tr
+              %td{:class => "first"} Height
+              %td=video.height
+            %tr
+              %td{:class => "first"} FPS
+              %td=video.fps
+            %tr
+              %td{:class => "first"} Encodings
+              %td
+                %ul{:class => "table_list"}
+                  -video.video_encodings.each do |ve|
+                    %li
+                      %a{:href => "#encoding_#{ve.id}", :class => "video_link"}=ve.filepath
+                      |
+                      =ve.state
+                    %div{:style => "display:none;"}
+                      %div{:id => "encoding_#{ve.id}"}
+                        %video{:id => "encodedvideo_#{ve.id}", :src => "#{ve.filepath}", :width => 400, :height => 315, :controls => true, :poster => "#{ve.thumbnail_path}"}
+                        /%object{:id => "player", :classid => "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000", :name => "player", :width => "400", :height => "315"}
+                        /  %param{:name => "movie", :value => "player.swf"}
+                        /  %param{:name => "allowfullscreen", :value => "true"}
+                        /  %param{:name => "allowscriptaccess", :value => "always"}
+                        /  %param{:name => "flashvars", :value => "file=#{ve.filepath}&image=#{ve.thumbnail_path}"}
+
+                        /  %embed{:type => "application/x-shockwave-flash", :id => "player2", :name => "player2", :src => "player.swf", :width => "400", :height => "315", :allowscriptaccess => "always", :allowfullscreen => "true", :flashvars => "file=#{ve.filepath}&image=#{ve.thumbnail_path}"}
+        
+
+%a{:href => "#", :onclick => "$('#client_details').hideElement();", :class => "right"} Hide Details
+:javascript
+  $('.video_link').fancybox({
+    'hideOnContentClick': false,
+    afterLoad: function() {
+      videoId = $(this.src).find('video').attr('id');
+      videoSrc = $(this.src).find('video').attr('src');
+      var regex = /^blob:*/g;
+      if( !videoSrc.match(regex) ) {
+        if( Hls.isSupported() ) {
+          video = document.getElementById(videoId);
+          hls = new Hls();
+          //hls.loadSource('https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8');
+          hls.loadSource(videoSrc);
+          hls.attachMedia(video);
+          //hls.on(Hls.Events.MANIFEST_PARSED,function() {
+            //video.play();
+          //});
+        }
+        // hls.js is not supported on platforms that do not have Media Source Extensions (MSE) enabled.
+        // When the browser has built-in HLS support (check using `canPlayType`), we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video element throught the `src` property.
+        // This is using the built-in support of the plain video element, without using hls.js.
+        else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          debugger;
+          //video.src = 'https://video-dev.github.io/streams/x36xhzz/x36xhzz.m3u8';
+          video.src = videoSrc;
+          //video.addEventListener('canplay',function() {
+          //  video.play();
+          //});
+        }
+      }
+    }
+    //,
+    //afterClose: function(){
+    //  //debugger;
+    //  //hls.detachMedia(video);
+    //  //hls.destroy();
+    //}
+  });
